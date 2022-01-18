@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+    <style>
+        body {
+            margin-top: 15px;
+        }
+    </style>
+    <script src="js/jQuery.min.js"></script>
+    <script src="js/cmt.js"></script>
+
+</head>
+
+<body>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">发表评论</h3>
+        </div>
+        <form class="panel-body" id='formaddcmt'>
+            <label for="inputHelpBlock">评论人:</label>
+            <input name="username" type="text" id="inputHelpBlock" class="form-control" aria-describedby="helpBlock">
+            <label for="inputHelpBlock">评论内容:</label>
+            <textarea name="content" class="form-control"></textarea>
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">发表评论</button>
+        </form>
+    </div>
+    <!-- 评论列表 -->
+    <ul class="list-group" id="comment-list">
+        <li class="list-group-item">
+            <span class="badge" style="background-color: cornflowerblue;">评论时间:</span>
+            <span class="badge">评论人:</span> Item 1
+        </li>
+        <li class="list-group-item">
+            <span class="badge" style="background-color: cornflowerblue;">评论时间:</span>
+            <span class="badge">评论人:</span> Item 1
+        </li>
+        <li class="list-group-item">
+            <span class="badge" style="background-color: cornflowerblue;">评论时间:</span>
+            <span class="badge">评论人:</span> Item 1
+        </li>
+</body>
+
+</html>

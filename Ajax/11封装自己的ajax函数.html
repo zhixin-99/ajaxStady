@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>封装自己的Ajax函数</title>
+</head>
+
+<body>
+    <script>
+        // 定义处理data对象数据的函数
+        function resolveData(data) {
+            var arr = []
+            for (let k in data) {
+                arr.push(`${k}=${data[k]}`)
+            }
+            return arr.join('&')
+        }
+        // 封装Ajax函数
+        function itheima(options) {
+            //获取用户数据
+            var qs = resolveData(options.data)
+                //创建异步对象
+            var xhr = new XMLHttpRequest()
+                //设置请求行open()
+                // 判断method是get还是post请求
+            if (options.method.toUpperCase() === 'GET') {
+                xhr.open(options.method, `${options.url}?${qs}`)
+                    //发送请求
+                xhr.send()
+            } else if (options.method.toUpperCase() === 'POST') {
+                xhr.open(options.method, `${options.url}`)
+                    // 3.设置Content-Type属性
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+                    // 发送数据请求 
+                xhr.send(qs)
+
+            }
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var result = JSON.parse(xhr.responseText)
+                    options.success(result)
+                }
+            }
+        }
+        // 调用自己的Ajax函数
+        itheima({
+            method: 'GET',
+            url: 'http://www.liulongbin.top:3006/api/getBooks',
+            data: {
+                id: 1
+            },
+            success: function(res) {
+                if (res.status !== 200) return alert('请求失败!')
+                console.log(res);
+            }
+
+        })
+    </script>
+
+</body>
+
+</html>

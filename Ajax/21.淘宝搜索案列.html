@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav {
+            width: 950px;
+            height: 320px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        
+        .search {
+            position: relative;
+            width: 600px;
+            margin: 60px auto;
+            border: 3px solid coral;
+            text-align: left;
+        }
+        
+        .search1 {
+            border-bottom: transparent;
+        }
+        
+        .search a {
+            display: block;
+            position: absolute;
+            top: -30px;
+            left: -3px;
+            width: 50px;
+            height: 30px;
+            line-height: 30px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .search .dp {
+            left: 47px;
+        }
+        
+        .search .currtent {
+            background-color: coral;
+            color: #fff;
+        }
+        
+        .search a.currtent:hover {
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        .search a:hover {
+            text-decoration: underline;
+            color: coral;
+        }
+        
+        .ipt {
+            width: 520px;
+            height: 36px;
+            line-height: 36px;
+            padding-left: 5px;
+            font-size: 14px;
+            outline: none;
+            border: 0;
+        }
+        
+        .btn {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            height: 42px;
+            width: 80px;
+            vertical-align: top;
+            color: #fff;
+            background-color: coral;
+            border: 0;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background-color: darkgoldenrod;
+        }
+        
+        .items {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 36px;
+            height: 250px;
+            width: 520px;
+            border: 1px solid #ccc;
+            z-index: 9999;
+        }
+        
+        .items li {
+            list-style: none;
+            width: 516px;
+            height: 25px;
+            line-height: 25px;
+            padding-left: 5px;
+        }
+        
+        .items li:hover {
+            background: #ccc;
+        }
+    </style>
+    <script src="js/jQuery.min.js"></script>
+    <script src="template/template-web.js"></script>
+</head>
+
+<body>
+    <div class="nav">
+        <a href="http://www.taobao.com">
+            <img src="img/taobao.png" alt="">
+        </a>
+        <div class="search">
+            <a class="bb currtent" href="javascript:;">宝贝</a><a class="dp" href="javascript:;">店铺</a>
+            <input class="ipt" type="search" autofocus placeholder="请输入要搜索的内容" value=""><button class="btn">搜索</button>
+            <ul class="items" id='ul'>
+            </ul>
+        </div>
+
+    </div>
+    <!-- 定义模板字符串 -->
+    <script type="text/html" id='suggest-List'>
+        {{each result }}
+        <li data-index={{$index}}>{{$value[0]}}</li>
+        {{/each}}
+    </script>
+    <script>
+        $(function() {
+            // 定义延时器ID
+            var timer = null
+                // 定义全局缓存
+            var cecheObj = {}
+                // 定义防抖函数
+            function debounceSearch(keywords) {
+                timer = setTimeout(function() {
+                    getSuggestList(keywords)
+                }, 500)
+            }
+
+            $('.search>a').on('click', function() {
+                    $(this).addClass('currtent').siblings('a').removeClass('currtent')
+                })
+                // 添加类
+            function add() {
+                $(this).parent().addClass('search1')
+                $(this).siblings('.items').show()
+            }
+            // 删除类
+            function remove() {
+                $(this).parent().removeClass('search1')
+                $(this).siblings('.items').hide()
+            }
+
+
+
+            $('.ipt').on({
+                    // 绑定鼠标弹起事件
+                    keyup: function() {
+                        // 获取用户输入内容
+                        var kw = $(this).val().trim()
+                        if (kw.length <= 0) return remove.call(this)
+                        add.call(this)
+                            // 判断用户输入的内容是否有缓存 如果有缓存就把缓存数据给用户
+                        if (cecheObj[kw]) {
+                            var htmlstr = template('suggest-List', cecheObj[kw])
+                            $('#ul').html(htmlstr)
+                            return true
+                        }
+                        // 如果没有缓存再发起jSONP请求
+                        clearTimeout(timer)
+                            // 调用防抖函数
+                        debounceSearch(kw)
+
+                    },
+                    blur: function() {
+                        remove.call(this)
+                    },
+                    focus: function() {
+                        $(this).keyup()
+                    }
+                })
+                // 定义请求JSONP数据函数
+            function getSuggestList(kw) {
+                $.ajax({
+                    type: "GET", //默认get
+                    url: `https://suggest.taobao.com/sug?q=${kw}`, //默认当前页
+                    dataType: "jsonp",
+                    success: function(res) { //请求成功回调
+                        // 把用户输入的内容作为键 请求到的结果作为值缓存
+                        var k = $('.ipt').val().trim()
+                        cecheObj[k] = res
+                            // 调用模板引擎
+                        var htmlstr = template('suggest-List', res)
+                            // 渲染页面
+                        $('#ul').html(htmlstr)
+                    }
+                })
+            }
+            // 给ul绑定点击事件
+            $('#ul').on('click', 'li', function(e) {
+                e.preventDefault();
+                $('.ipt').val($(this).html());
+                remove.call($('.ipt'))
+                window.location.assign("https://www.taobao.com/")
+            })
+        })
+    </script>
+</body>
+
+</html>

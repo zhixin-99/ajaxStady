@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/jQuery.min.js"></script>
+    <style>
+        #imgs {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <input type="file" id="file1">
+    <button id="fileBtn">上传</button>
+    <br>
+    <img src="img/loading.gif" id='imgs'>
+    <img src="" alt="" id='img'>
+    <script>
+        $(function() {
+            // Ajax开始执行的函数
+            $(document).ajaxStart(function() {
+                    $('#imgs').show()
+                })
+                // Ajax请求结束执行的函数
+            $(document).ajaxStop(function() {
+                    $('#imgs').hide()
+                })
+                // 给上传按钮绑定单击事件
+            $('#fileBtn').on('click', function() {
+                // 获取文件列表
+                var files = $('#file1')[0].files
+                    // 判断用户是否选择了文件列表
+                if (files.length <= 0) return alert('请选择要上传的图片!')
+                    // 创建一个FD对象实例
+                const fd = new FormData()
+                    // 把用户选择的文件添加到对象里
+                fd.append('avatar', files[0])
+                    // 使用ajax 发起请求
+                $.ajax({
+                    type: "POST", //默认get
+                    url: "http://www.liulongbin.top:3006/api/upload/avatar", //默认当前页
+                    data: fd, //格式{key:value}
+                    contentType: false,
+                    processData: false,
+                    // beforeSend: function() {
+                    //     $('#imgs').show();
+                    // },
+                    success: function(res) { //请求成功回调
+                        if (res.status !== 200) return alert('文件上传失败!')
+                        $('#img').prop('src', `http://www.liulongbin.top:3006${res.url}`)
+                    }
+                })
+
+            })
+        })
+    </script>
+</body>
+
+</html>

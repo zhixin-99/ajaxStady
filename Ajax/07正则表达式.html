@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>我是{{name}},年龄{{age}}</div>
+    <script>
+        // var str = '<div>我是{{name}},年龄{{age}}</div>'
+        // var reg = /{{([a-zA-Z]+)}}/
+        // var result = reg.exec(str)
+        // console.log(result);
+        // while循环replace
+        var str = '<div>我是{{name}},年龄{{age}}</div>'
+        var reg = /{{\s*([a-zA-Z]+)\s*}}/
+        var result = null
+        while (result = reg.exec(str)) {
+            str = str.replace(result[0], result[1])
+        }
+        console.log(str);
+    </script>
+</body>
+
+</html>

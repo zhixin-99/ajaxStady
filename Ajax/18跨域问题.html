@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/jQuery.min.js"></script>
+</head>
+
+<body>
+    <script>
+        $.ajax({
+            type: "GET", //默认get
+            url: "http://ajax.frontend.itheima.net:3006/api/jsonp", //默认当前页
+            data: {
+                name: '张三',
+                age: 20
+            }, //格式{key:value}
+            success: function(res) { //请求成功回调
+                console.log(res);
+            }
+        })
+    </script>
+</body>
+
+</html>

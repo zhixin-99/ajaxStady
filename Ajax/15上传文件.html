@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="js/bootstrap.min.css">
+    <script src="js/jQuery.min.js"></script>
+    <style>
+        .progress {
+            width: 400px;
+            height: 10px;
+            display: none;
+        }
+        
+        .progress-bar {
+            line-height: 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <form id='form2'>
+        <input type="file" id='form1' name="file" value="">
+        <button id='btn'>上传</button>
+    </form>
+    <br>
+    <!-- 上传文件进度条 -->
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped active" id="progress-bar">
+        </div>
+    </div>
+    <img src="" alt="" width="800px" id='img'>
+    <script>
+        // 获取文件上传按钮
+        const btn = document.querySelector('#btn')
+            // 给按钮绑定单击事件
+        btn.addEventListener('click', function(e) {
+            // 阻止默认认为
+            e.preventDefault()
+                // 获取用户选择的文件列表
+            var file = document.querySelector('#form1').files
+                // 判断列表是否为空
+                // 如果为空就说明用户没选择文件 然后提醒用户选择文件
+            if (file.length <= 0) return alert('请选择要上传的文件!')
+                // 新建一个表单对象并将文件添加进去
+            var fd = new FormData()
+            fd.append('avatar', file[0])
+                // 创建xhr 对象
+            var xhr = new XMLHttpRequest()
+                // 监听文件上传的进度
+            xhr.upload.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        var percentcomplete = Math.ceil((e.loaded / e.total) * 100)
+                        $('.progress').stop().fadeIn()
+                        $('#progress-bar').prop('style', `width: ${percentcomplete}%`).html(`${percentcomplete}%`)
+                            // if (percentcomplete === 100) {
+                            //     setTimeout(function() {
+                            //         $('.progress').stop().fadeOut()
+                            //         console.log('上传成功');
+                            //     }, 2000)
+                            // }
+                    }
+                }
+                // 监听上传完成
+            xhr.upload.onload = function() {
+                    // 上传完成清除进度条样式的类
+                    $('#progress-bar').removeClass('progress-bar-striped').addClass('progress-bar-success')
+                        // 添加为新的样式
+                }
+                // 调用OPen方法传递请求要的数据
+            xhr.open('POST', 'http://www.liulongbin.top:3006/api/upload/avatar')
+                // 调用send方法上传文件
+            xhr.send(fd)
+                // 监听文件上传的事件
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText)
+                    if (data.status === 200) {
+                        document.querySelector('#img').src = `http://www.liulongbin.top:3006${data.url}`
+                    } else {
+                        alert(data.message)
+                    }
+
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/news.css">
+    <script src="js/jQuery.min.js"></script>
+    <script src="template/template-web.js"></script>
+    <script src="js/news.js"></script>
+</head>
+
+<body>
+    <section id="news-14">
+
+    </section>
+    <script type="text/html" id="hi">
+        {{each data}}
+        <div class="new clearfix">
+            <div class="img">
+                <a href="#">
+                    <img src="http://www.liulongbin.top:3006{{$value.img}}" alt="">
+                </a>
+            </div>
+            <div class="news">
+                <h3 class="title">{{$value.title}}</h3>
+                <div class="label clearfix">
+                    {{each $value.tags}}
+                    <span>{{$value}}</span> {{/each}}
+                </div>
+                <div class="source">
+                    <span class="uname">{{$value.source}}</span>
+                    <span class="time">{{$value.time|setTime}}</span>
+                    <span class="num">评论数:{{$value.cmtcount}}</span>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/jQuery.min.js"></script>
+</head>
+
+<body>
+    <script>
+        $(function() {
+            function abc(data) {
+                console.log(data);
+            }
+
+            $.ajax({
+                //默认get
+                // method: "GET",
+                type: 'get',
+                url: "https://ajax.frontend.itheima.net:3006/api/jsonp?name=zs&age=20", //默认当前页
+                // data: {
+                //     name: 'zs',
+                //     age: 20
+                // }, //格式{key:value}
+                dataType: "jsonp",
+                jsonp: 'callback',
+                jsonpCallback: 'abc',
+                success: function(res) {
+                    console.log(res);
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>

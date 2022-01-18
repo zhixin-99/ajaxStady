@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>定义简易的模板引擎</title>
+    <script src="template/template.js"></script>
+</head>
+
+<body>
+    <div id="user"></div>
+    <script type="text/html" id="tmp-user">
+        <div>姓名: {{name}}</div>
+        <div>年龄: {{ age }}</div>
+        <div>性别: {{ sex}}</div>
+        <div>地址: {{addr }}</div>
+    </script>
+    <script>
+        data = {
+            name: '吴晓伟',
+            age: 18,
+            sex: '男',
+            addr: '四川成都'
+        }
+        var htmlstr = template('tmp-user', data)
+        document.querySelector('#user').innerHTML = htmlstr
+    </script>
+</body>
+
+</html>

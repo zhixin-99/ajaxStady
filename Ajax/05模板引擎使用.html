@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模板引擎使用</title>
+    <script src="js/jQuery.min.js"></script>
+    <script src="template/template-web.js"></script>
+</head>
+
+<body>
+    < <!-- 1.导入atr-template -->
+        <script type="text/html" id='tmp'>
+            <!-- // 3.定义模板 -->
+            <h4>姓名:{{name}}</h4>
+            <!-- 原文输出 -->
+            {{@biaoti}} {{@finall}}
+            <!-- 条件输出 -->
+            <h3>
+                {{if age >30}} 我喜欢你妈! {{else if age=30}}/ 擦你老母! {{/if}}
+            </h3>
+            <div>{{regtime|getTime}}</div>
+            <ul>
+                <!-- 循环输出 -->
+                {{each hobby}}
+                <li>
+                    序号: {{$index}} 爱好:{{$value}} 密码:{{password|getNum}}
+                </li> {{/each}}
+            </ul>
+        </script>
+        <script>
+            // 2.定义数据
+            var data = {
+                name: '吴晓伟',
+                age: 30,
+                biaoti: '<h1>hello world!</h1>',
+                hobby: ['吃饭', '睡觉', '写代码'],
+                regtime: new Date(),
+                finall: '<h1>酒儿</h1>',
+                password: 808
+
+            }
+            template.defaults.imports.getNum = function(item) {
+                return item - 800
+            }
+
+            // function hi(date) {
+            //     let y = date.getFullYear()
+            //     y = y < 10 ? '0' + y : y
+            //     let m = date.getMonth() + 1
+            //     m = m < 10 ? '0' + m : m
+            //     let d = date.getDate()
+            //     d = d < 10 ? '0' + d : d
+            //     return `${y}-${m}-${d}`
+            // }
+            // 定义过滤器
+            template.defaults.imports.getTime = function hi(date) {
+                    let y = date.getFullYear()
+                    y = y < 10 ? '0' + y : y
+                    let m = date.getMonth() + 1
+                    m = m < 10 ? '0' + m : m
+                    let d = date.getDate()
+                    d = d < 10 ? '0' + d : d
+                    let s = date.getSeconds()
+                    return `${y}-${m}-${d}-${s}`
+                }
+                // 4.调用模板
+            var htmlstr = template('tmp', data)
+            $('#hi').html(htmlstr)
+        </script>
+
+</body>
+
+</html>

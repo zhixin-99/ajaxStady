@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/axios.js"></script>
+</head>
+
+<body>
+    <button id="btn">发起Get请求</button>
+    <button id="btn1">发起Post请求</button>
+    <button id="btn2">直接使用Axios发起Get请求</button>
+    <button id="btn3">直接使用Axios发起Post请求</button>
+    <script>
+        const btn = document.querySelector('#btn')
+        const btn1 = document.querySelector('#btn1')
+        const btn2 = document.querySelector('#btn2')
+        const btn3 = document.querySelector('#btn3')
+        btn.addEventListener('click', function() {
+            let arr = {
+                name: '张三',
+                age: 18
+            }
+            let url = 'http://www.liulongbin.top:3006/api/get'
+            axios.get(url, {
+                params: arr
+            }).then(function(res) {
+                console.log(res.data);
+            })
+        })
+        btn1.addEventListener('click', function() {
+            let arr = {
+                name: '张三',
+                age: 18
+            }
+            let url = 'http://www.liulongbin.top:3006/api/post'
+            axios.post(url, arr).then(function(res) {
+                console.log(res.data);
+            })
+        })
+        btn2.addEventListener('click', function() {
+            axios({
+                method: 'GET',
+                url: 'http://www.liulongbin.top:3006/api/get',
+                params: {
+                    name: '张三',
+                    age: 18
+                }
+            }).then(function(res) {
+                console.log(res.data);
+            })
+        })
+        btn3.addEventListener('click', function() {
+            axios({
+                method: 'POST',
+                url: 'http://www.liulongbin.top:3006/api/post',
+                data: {
+                    name: '张三',
+                    age: 18
+                }
+            }).then(function(res) {
+                console.log(res.data);
+            })
+        })
+    </script>
+</body>
+
+</html>
